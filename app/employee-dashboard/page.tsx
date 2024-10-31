@@ -16,12 +16,17 @@ export default function EmployeeDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [folderList, setFolderList] = useState<FolderTypes[]>([]);
   const [qrValue, setQrValue] = useState("");
+  const [userName, setUserName] = useState("");
+  const [organizationName, setOrgName] = useState("");
 
   useEffect(() => {
     // Fetch and load employee-specific data here if needed
     const folderData = JSON.parse(localStorage.getItem("folderData"));
     console.log("Parsed Folder Data:", folderData);
     setFolderList(folderData);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    setOrgName(userData.Organization_Name);
+    setUserName(userData?.dashboard);
   }, []);
 
   const folders = [
@@ -160,8 +165,8 @@ export default function EmployeeDashboard() {
               <button className="inline-flex items-center p-2 hover:bg-gray-100 focus:bg-gray-100 rounded-lg">
                 <span className="sr-only">User Menu</span>
                 <div className="hidden md:flex md:flex-col md:items-end md:leading-tight">
-                  <span className="font-semibold text-white">
-                    Tushar Bhayani
+                  <span className="font-semibold sm:text-2xl font-semibold text-white/80 capitalize-first">
+                    {userName}
                   </span>
                 </div>
                 <span className="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
@@ -226,25 +231,6 @@ export default function EmployeeDashboard() {
                         <p className="text-gray-800 font-semibold mb-2">
                           {folder.name.split("-")[1]}
                         </p>
-                        <div
-                          onClick={() => toNextPage()}
-                          className="cursor-pointer inline-flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-5 h-5 text-gray-600"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-                            />
-                          </svg>
-                        </div>
                       </div>
                     </Card>
                   </div>

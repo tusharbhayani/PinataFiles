@@ -28,8 +28,8 @@ export default function OrganizationDashboard() {
   const [folderList, setFolderList] = useState<FolderTypes[]>([]);
   const [useName, setUserName] = useState("");
   const [organizationName, setOrgName] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [qrValue, setQrValue] = useState('');
+  const [did, setDid] = useState("");
+  const [folderName, setFolderName] = useState("");
 
   useEffect(() => {
     // Fetch and load employee-specific data here if needed
@@ -41,24 +41,43 @@ export default function OrganizationDashboard() {
     setUserName(userData?.dashboard);
   }, []);
 
-  const folders = [
-    "Folder 1",
-    "Folder 2",
-    "Folder 3",
-    "Folder 4",
-    "Folder 5",
-    "Folder 6",
-  ];
-
-  const handleFolderClick = (folderName: string) => {
-    // Set the QR value to be shown in the modal
-    // setQrValue(folderName);
-    setIsModalOpen(true);
+  const GiveFolderAccessAccess = async () => {
+    const giveAccessParams = {
+      holderDid: did,
+      orgId: organizationName,
+      folderName: folderName,
+      email: "tushar.bhayani@ayanworks.com",
+      firstName: "Tushar",
+      lastName: "Bhayani",
+      department: "Information Technology",
+      organizationName: organizationName,
+      expires: new Date(),
+      admin: "true",
+    };
+    const options = {
+      method: "POST", // HTTP method
+      headers: {
+        Accept: "*/*", // Accept header
+        "Content-Type": "application/json", // Content-Type header
+      },
+      body: JSON.stringify(giveAccessParams), // Convert the data object to a JSON string
+    };
+    const apiResponse = await fetch(
+      `https://dif-pinatrust.onrender.com/access`,
+      options
+    );
+    const folderData = await apiResponse.json();
+    alert(folderData?.status);
   };
 
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
+  const handleFolderClick = (folderName: string) => {
+    setFolderName(folderName);
+    onOpen();
+  };
+
+  const handleSubmit = () => {
+    GiveFolderAccessAccess();
+  };
 
   return (
     <div className="flex flex-col sm:flex-row bg-gray-100 min-h-screen">
@@ -185,16 +204,14 @@ export default function OrganizationDashboard() {
                 >
                   <Card
                     shadow="sm"
-                    isPressable
-                    // onPress={() => handleFolderClick(folder)}
-                    onClick={onOpen}
-                    className="w-full"
+                    // isPressable
+
+                    // className="w-full"
                   >
-                    {/* <CardBody className="p-0 bg-white h-[140px] w-[292px] rounded-lg"></CardBody>
-                    <p className="text-white font-semibold mt-3">
-                      {folder.name.split("-")[1]}
-                    </p> */}
-                    <div className="flex items-center justify-between w-full h-[140px] rounded-lg">
+                    <div
+                      onClick={() => navigationRouter.push("/files-dashboard")}
+                      className="flex items-center justify-between w-full h-[140px] rounded-lg"
+                    >
                       <CardBody className="p-0 bg-white h-[140px] w-[292px] rounded-lg"></CardBody>
                     </div>
                     <div className="flex justify-between w-full mt-5 items-center">
@@ -202,8 +219,8 @@ export default function OrganizationDashboard() {
                         {folder.name.split("-")[1]}
                       </p>
                       <div
-                        onClick={() => {}}
                         className="cursor-pointer inline-flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300"
+                        onClick={(e) => e.stopPropagation()} // Prevent click event from propagating to the parent Card
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -212,6 +229,9 @@ export default function OrganizationDashboard() {
                           strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-5 h-5 text-gray-600"
+                          onClick={() => {
+                            handleFolderClick(folder.name.split("-")[1]);
+                          }}
                         >
                           <path
                             strokeLinecap="round"
@@ -264,40 +284,19 @@ export default function OrganizationDashboard() {
                   // label="DID"
                   placeholder="Enter your DiD"
                   // variant="bordered"
-                  className="text-black placeholder-gray-400"
+                  onChange={(e) => setDid(e.target.value)}
+                  className="text-black mt-5 placeholder-gray-400"
                   fullWidth
                 />
-                {/* <Input
-                  endContent={
-                    <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  }
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
-                  variant="bordered"
-                  fullWidth // Make the input full width
-                  className="mt-4" // Add margin to separate inputs
-                /> */}
-                {/* <div className="flex py-2 px-1 justify-between">
-                  <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
-                </div> */}
               </ModalBody>
-              <ModalFooter className="flex justify-center">
-                {" "}
-                {/* Center the footer buttons */}
-                {/* <Button color="danger" variant="flat" onPress={onClose} className="mr-2">
-                  Close
-                </Button> */}
-                <Button color="primary" onPress={onClose}>
+              <ModalFooter className="flex mt-5 justify-center">
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    handleSubmit();
+                    onClose();
+                  }}
+                >
                   Submit
                 </Button>
               </ModalFooter>
