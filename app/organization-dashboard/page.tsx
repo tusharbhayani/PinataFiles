@@ -1,19 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import {
   Card,
-  CardBody,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  Input,
+  CardBody
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 // import QRCode from "react-qr-code";
 
 type FolderTypes = {
@@ -24,26 +16,24 @@ type FolderTypes = {
 };
 export default function OrganizationDashboard() {
   const navigationRouter = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [folderList, setFolderList] = useState<FolderTypes[]>([]);
   const [useName, setUserName] = useState("");
   const [organizationName, setOrgName] = useState("");
-  const [did, setDid] = useState("");
-  const [folderName, setFolderName] = useState("");
+  // const [did, setDid] = useState("");
+  // const [folderName, setFolderName] = useState("");
 
   useEffect(() => {
     // Fetch and load employee-specific data here if needed
     const folderData = JSON.parse(localStorage.getItem("folderData"));
-    console.log("Parsed Folder Data:", folderData);
     setFolderList(folderData);
     const userData = JSON.parse(localStorage.getItem("userData"));
     setOrgName(userData.Organization_Name);
     setUserName(userData?.dashboard);
   }, []);
 
-  const GiveFolderAccessAccess = async () => {
+  const GiveFolderAccessAccess = async (folderName: string) => {
     const giveAccessParams = {
-      holderDid: did,
       orgId: organizationName,
       folderName: folderName,
       email: "tushar.bhayani@ayanworks.com",
@@ -70,14 +60,14 @@ export default function OrganizationDashboard() {
     alert(folderData?.status);
   };
 
-  const handleFolderClick = (folderName: string) => {
-    setFolderName(folderName);
-    onOpen();
-  };
+  // const handleFolderClick = (folderName: string) => {
+  //   setFolderName(folderName);
+  //   onOpen();
+  // };
 
-  const handleSubmit = () => {
-    GiveFolderAccessAccess();
-  };
+  // const handleSubmit = () => {
+  //   // GiveFolderAccessAccess();
+  // };
 
   return (
     <div className="flex flex-col sm:flex-row bg-gray-100 min-h-screen">
@@ -209,7 +199,10 @@ export default function OrganizationDashboard() {
                     // className="w-full"
                   >
                     <div
-                      onClick={() => navigationRouter.push("/files-dashboard")}
+                      onClick={() => {
+                        GiveFolderAccessAccess(folder.name.split("-")[1]);
+                        // navigationRouter.push("/files-dashboard")
+                      }}
                       className="flex items-center justify-between w-full h-[140px] rounded-lg"
                     >
                       <CardBody className="p-0 bg-white h-[140px] w-[292px] rounded-lg"></CardBody>
@@ -247,7 +240,7 @@ export default function OrganizationDashboard() {
           </section>
         </main>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         placement="center" // Centering the modal
@@ -303,7 +296,7 @@ export default function OrganizationDashboard() {
             </>
           )}
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

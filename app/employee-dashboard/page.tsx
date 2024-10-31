@@ -1,9 +1,8 @@
 "use client";
 
+import { Card, CardBody } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Card, CardBody } from "@nextui-org/react";
-import QRCode from "react-qr-code";
 
 type FolderTypes = {
   created_at: string;
@@ -13,9 +12,7 @@ type FolderTypes = {
 };
 export default function EmployeeDashboard() {
   const navigationRouter = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [folderList, setFolderList] = useState<FolderTypes[]>([]);
-  const [qrValue, setQrValue] = useState("");
   const [userName, setUserName] = useState("");
   const [organizationName, setOrgName] = useState("");
 
@@ -25,36 +22,36 @@ export default function EmployeeDashboard() {
     console.log("Parsed Folder Data:", folderData);
     setFolderList(folderData);
     const userData = JSON.parse(localStorage.getItem("userData"));
-    setOrgName(userData.Organization_Name);
+    setOrgName(userData?.Organization_Name);
     setUserName(userData?.dashboard);
   }, []);
 
-  const folders = [
-    "Folder 1",
-    "Folder 2",
-    "Folder 3",
-    "Folder 4",
-    "Folder 5",
-    "Folder 6",
-  ];
-
-  const handleFolderClick = (folderName: string) => {
-    // Set the QR value to be shown in the modal
-    setQrValue(folderName);
-    setIsModalOpen(true);
+  const handleFolderClick = async (folderName: string) => {
+    localStorage.setItem("folderName", JSON.stringify(folderName));
+    const getAccessParams = {
+      orgId: organizationName,
+      folderName: folderName,
+      firstName: "Tushar",
+      lastName: "Bhayani",
+      department: "Information Technology",
+      organizationName: organizationName,
+      connectionId: "3337c84b-4208-472d-b4a4-0beba4874be9",
+    };
+    const options = {
+      method: "POST", // HTTP method
+      headers: {
+        Accept: "*/*", // Accept header
+        "Content-Type": "application/json", // Content-Type header
+      },
+      body: JSON.stringify(getAccessParams), // Convert the data object to a JSON string
+    };
+    const apiResponse = await fetch(
+      `https://dif-pinatrust.onrender.com/access-folder`,
+      options
+    );
+    const folderData = await apiResponse.json();
+    if (folderData?.result) navigationRouter.push("/files-dashboard");
   };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const toNextPage = () => {
-    navigationRouter.push("/files-dashboard");
-  };
-
-  // const toggleDropdown = (index: number) => {
-  //   setDropdownIndex(dropdownIndex === index ? null : index);
-  // };
 
   return (
     <>
@@ -219,9 +216,9 @@ export default function EmployeeDashboard() {
                     <Card
                       shadow="sm"
                       isPressable
-                      onPress={() =>
-                        handleFolderClick(folder.name.split("-")[1])
-                      }
+                      onPress={() => {
+                        handleFolderClick(folder.name.split("-")[1]);
+                      }}
                       className="w-full"
                     >
                       <div className="flex items-center justify-between w-full p-4 bg-gray-600 h-[140px] rounded-lg">
@@ -238,7 +235,7 @@ export default function EmployeeDashboard() {
             </section>
           </main>
         </div>
-        {isModalOpen && (
+        {/* {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
             <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-sm mx-4 sm:mx-0 transform transition-transform duration-300">
               <h2 className="text-xl font-semibold text-gray-800 text-center">
@@ -266,7 +263,7 @@ export default function EmployeeDashboard() {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </body>
     </>
   );
