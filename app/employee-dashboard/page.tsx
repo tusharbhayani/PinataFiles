@@ -27,6 +27,7 @@ export default function EmployeeDashboard() {
   }, []);
 
   const handleFolderClick = async (folderName: string) => {
+    try {
     localStorage.setItem("folderName", JSON.stringify(folderName));
     const userData = JSON.parse(localStorage.getItem("userData"));
     const connectionId = userData.connectionId;
@@ -52,7 +53,17 @@ export default function EmployeeDashboard() {
       options
     );
     const folderData = await apiResponse.json();
-    if (folderData?.result) navigationRouter.push("/files-dashboard");
+    if (folderData?.result) {
+      navigationRouter.push("/files-dashboard");
+    }
+    else {
+      console.log("this is folderData error", folderData)
+      alert(`Error: (${folderData.statusCode}) ${folderData.message}`)
+    }
+  } catch (err) {
+    console.log("Error caught", err.response)
+    alert(`Error:: ${JSON.stringify(err.response)}`)
+  }
   };
 
   return (
