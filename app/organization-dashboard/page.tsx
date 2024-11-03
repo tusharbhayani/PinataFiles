@@ -207,7 +207,10 @@ export default function OrganizationDashboard() {
                     // className="w-full"
                   >
                     <div
-                      onClick={() => navigationRouter.push("/files-dashboard")}
+                      onClick={() => {
+                        localStorage.setItem("folderName", JSON.stringify(folder.name.split("-")[1]));
+                        navigationRouter.push("/files-dashboard")
+                      }}
                       className="flex items-center justify-between w-full h-[140px] rounded-lg"
                     >
                       <CardBody className="p-0 bg-white h-[140px] w-[292px] rounded-lg"></CardBody>
