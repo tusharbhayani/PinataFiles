@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Fetch user from Supabase
     const { data: user, error } = await supabase
       .from('Users')
-      .select('Email, Password, isOrg, org_did, First_Name, Organization_Name')  
+      .select('Email, Password, isOrg, org_did, First_Name, Organization_Name, Connection_Id')  
       .ilike('Email', email) 
       .single();
 
@@ -41,7 +41,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ 
         message: "Sign-in successful, redirecting to employee dashboard", 
         dashboard: 'employee',
-        Organization_Name: user.Organization_Name
+        Organization_Name: user.Organization_Name,
+        connectionId: user.Connection_Id
       }, { status: 200 });
     }
   } catch (error) {

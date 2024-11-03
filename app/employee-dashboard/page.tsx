@@ -28,6 +28,8 @@ export default function EmployeeDashboard() {
 
   const handleFolderClick = async (folderName: string) => {
     localStorage.setItem("folderName", JSON.stringify(folderName));
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const connectionId = userData.connectionId;
     const getAccessParams = {
       orgId: organizationName,
       folderName: folderName,
@@ -35,7 +37,7 @@ export default function EmployeeDashboard() {
       lastName: "Bhayani",
       department: "Information Technology",
       organizationName: organizationName,
-      connectionId: "3337c84b-4208-472d-b4a4-0beba4874be9",
+      connectionId: connectionId,
     };
     const options = {
       method: "POST", // HTTP method
