@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Button } from "@nextui-org/react";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 type FileTypes = {
   cid: string;
@@ -19,6 +20,7 @@ type FileTypes = {
 export default function App() {
   const [fileList, setFileList] = useState<FileTypes[]>([]);
   const [userName, setUserName] = useState("");
+  const navigationRouter = useRouter();
 
   useEffect(() => {
     const folderName = JSON.parse(localStorage.getItem("folderName"));
