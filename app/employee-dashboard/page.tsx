@@ -34,9 +34,9 @@ export default function EmployeeDashboard() {
     const getAccessParams = {
       orgId: organizationName,
       folderName: folderName,
-      firstName: "Tushar",
-      lastName: "Bhayani",
-      department: "Information Technology",
+      firstName: "Bob",
+      lastName: "Doe",
+      department: "Engineering",
       organizationName: organizationName,
       connectionId: connectionId,
     };

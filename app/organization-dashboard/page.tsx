@@ -45,11 +45,11 @@ export default function OrganizationDashboard() {
       orgId: organizationName,
       folderName: folderName,
       email: did,
-      firstName: "Tushar",
-      lastName: "Bhayani",
-      department: "Information Technology",
+      firstName: "Bob",
+      lastName: "Doe",
+      department: "Engineering",
       organizationName: organizationName,
-      expires: new Date(),
+      // expires: new Date().toString(),
       admin: "true",
     };
     const options = {
@@ -208,8 +208,11 @@ export default function OrganizationDashboard() {
                   >
                     <div
                       onClick={() => {
-                        localStorage.setItem("folderName", JSON.stringify(folder.name.split("-")[1]));
-                        navigationRouter.push("/files-dashboard")
+                        localStorage.setItem(
+                          "folderName",
+                          JSON.stringify(folder.name.split("-")[1])
+                        );
+                        navigationRouter.push("/files-dashboard");
                       }}
                       className="flex items-center justify-between w-full h-[140px] rounded-lg"
                     >
